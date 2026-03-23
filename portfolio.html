@@ -1,0 +1,1351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Henry French</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Rubik:wght@900&family=Permanent+Marker&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --paper: #eeebe4;
+      --ink: #111110;
+    }
+
+    body {
+      background-color: var(--paper);
+      color: var(--ink);
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 200px 200px;
+    }
+
+    * { position: relative; z-index: 1; }
+
+    /* ── HEADER / NAV ── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--paper);
+      border-bottom: 1px solid rgba(17,17,16,0.12);
+    }
+
+    header nav {
+      display: flex;
+      align-items: center;
+      list-style: none;
+      padding: 0 32px;
+      height: 52px;
+      gap: 0;
+    }
+
+    .nav-brand { margin-right: auto; }
+
+    .brand-link {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 18px;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: opacity 0.2s;
+    }
+    .brand-link:hover { opacity: 0.55; }
+
+    header nav li a {
+      display: block;
+      text-decoration: none;
+      color: rgba(17,17,16,0.45);
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 6px 16px;
+      border-radius: 2px;
+      transition: color 0.18s;
+      position: relative;
+    }
+
+    header nav li a::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 16px; right: 16px;
+      height: 1.5px;
+      background: var(--ink);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.22s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    header nav li a:hover { color: var(--ink); }
+    header nav li a:hover::after { transform: scaleX(1); }
+    header nav li a.active { color: var(--ink); background: rgba(17,17,16,0.06); }
+    header nav li a.active::after { transform: scaleX(1); }
+
+    /* ── PAGE HERO ── */
+    .portfolio-hero {
+      padding: 72px 72px 48px;
+      border-bottom: 1px solid rgba(17,17,16,0.1);
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 40px;
+    }
+
+    .hero-title {
+      font-family: 'Permanent Marker', cursive;
+      font-size: clamp(52px, 7vw, 96px);
+      line-height: 0.95;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-right {
+      text-align: right;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .hero-stat {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(17,17,16,0.4);
+    }
+
+    .hero-stat strong {
+      font-size: 32px;
+      font-family: 'Permanent Marker', cursive;
+      color: var(--ink);
+      letter-spacing: 0.02em;
+      display: block;
+      line-height: 1;
+    }
+
+    .hero-imdb-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--paper);
+      background: var(--ink);
+      padding: 11px 20px;
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      transition: opacity 0.18s;
+      margin-top: 4px;
+    }
+    .hero-imdb-btn:hover { opacity: 0.75; }
+
+    /* ── FILTER BAR ── */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 18px 72px;
+      border-bottom: 1px solid rgba(17,17,16,0.08);
+    }
+
+    .filter-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      border: 1.5px solid rgba(17,17,16,0.18);
+      background: transparent;
+      color: rgba(17,17,16,0.45);
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+      border-radius: 2px;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    /* ── CREDITS ── */
+    .credits-section {
+      padding: 0 72px 100px;
+    }
+
+    .credits-category {
+      margin-top: 60px;
+    }
+
+    .category-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+
+    .category-label-text {
+      font-family: 'Permanent Marker', cursive;
+      font-size: 30px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .category-rule {
+      flex: 1;
+      height: 1px;
+      background: repeating-linear-gradient(
+        90deg,
+        rgba(17,17,16,0.2) 0px, rgba(17,17,16,0.2) 5px,
+        transparent 5px, transparent 10px
+      );
+    }
+
+    .category-count {
+      font-size: 10px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(17,17,16,0.3);
+      flex-shrink: 0;
+    }
+
+    .category-icon {
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 38px;
+      height: 38px;
+      border: 1.5px solid rgba(17,17,16,0.15);
+      border-radius: 50%;
+      background: var(--paper);
+      color: rgba(17,17,16,0.55);
+      margin-left: 8px;
+      transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+
+    .credits-category:hover .category-icon {
+      background: var(--ink);
+      color: var(--paper);
+      border-color: var(--ink);
+    }
+
+    /* Credit rows */
+    .credit-row {
+      display: grid;
+      grid-template-columns: 52px 1fr 36px auto auto;
+      align-items: center;
+      padding: 14px 10px;
+      border-bottom: 1px solid rgba(17,17,16,0.07);
+      gap: 20px;
+      text-decoration: none;
+      color: var(--ink);
+      transition: background 0.14s;
+    }
+
+    .credit-row:hover { background: rgba(17,17,16,0.035); }
+
+    .credit-year {
+      font-size: 11px;
+      color: rgba(17,17,16,0.38);
+      font-style: italic;
+      letter-spacing: 0.04em;
+    }
+
+    .credit-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .credit-title small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: rgba(17,17,16,0.45);
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+    }
+
+    .credit-role {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(17,17,16,0.4);
+      white-space: nowrap;
+    }
+
+    .type-pill {
+      display: inline-block;
+      font-size: 9px;
+      font-family: 'Space Mono', monospace;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+    }
+
+    /* Company logos */
+    .credit-logo {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(17,17,16,0.06);
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(17,17,16,0.45);
+      letter-spacing: 0;
+      border: 1px solid rgba(17,17,16,0.08);
+      font-family: 'Space Mono', monospace;
+    }
+    .credit-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 4px;
+    }
+
+    .type-pill.film   { border: 1.5px solid var(--ink); color: var(--ink); }
+    .type-pill.tv     { border: 1.5px solid rgba(17,17,16,0.4); color: rgba(17,17,16,0.55); }
+    .type-pill.doc    { border: 1.5px solid rgba(17,17,16,0.3); color: rgba(17,17,16,0.5); font-style: italic; }
+    .type-pill.short  { border: 1.5px solid rgba(17,17,16,0.2); color: rgba(17,17,16,0.4); }
+    .type-pill.ad     { background: var(--ink); color: var(--paper); border: 1.5px solid var(--ink); }
+    .type-pill.sport  { border: 1.5px solid rgba(17,17,16,0.5); color: rgba(17,17,16,0.65); font-weight: 700; }
+
+    /* ── FOOTER ── */
+    .footer-wave {
+      display: block;
+      width: 100%;
+      height: 60px;
+      margin-bottom: -2px;
+    }
+
+    footer {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 32px 40px;
+      text-align: center;
+    }
+
+    .back-to-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--paper);
+      text-decoration: none;
+      border: 1px solid rgba(238,235,228,0.25);
+      padding: 10px 20px;
+      border-radius: 40px;
+      transition: border-color 0.2s;
+    }
+    .back-to-top:hover { border-color: rgba(238,235,228,0.7); }
+
+
+    /* ── GRAFFITI STRIP ── */
+    .graffiti-strip {
+      width: 100%;
+      overflow: hidden;
+      display: block;
+      line-height: 0;
+      position: relative;
+    }
+    .graffiti-strip svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE — iPad & iPhone
+  ══════════════════════════════════════════ */
+
+  /* ── Nav: scroll on small screens ── */
+  @media (max-width: 768px) {
+    header nav {
+      padding: 0 16px;
+      gap: 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    header nav::-webkit-scrollbar { display: none; }
+    header nav li a { padding: 6px 10px; font-size: 9px; letter-spacing: 0.12em; }
+    header nav li + li::before { margin: 0; }
+    .brand-link { font-size: 15px; white-space: nowrap; margin-right: 12px; }
+  }
+  @media (max-width: 480px) {
+    header nav li a { padding: 6px 8px; font-size: 8.5px; letter-spacing: 0.1em; }
+  }
+
+  @media (max-width: 1024px) {
+    .page-header { padding: 48px 40px 0; }
+    .credits-container { padding: 32px 40px 80px; }
+    .filter-bar { padding: 16px 40px 0; }
+  }
+  @media (max-width: 768px) {
+    .page-header { padding: 36px 24px 0; }
+    .credits-container { padding: 24px 24px 64px; }
+    /* filter bar: horizontal scroll */
+    .filter-bar {
+      padding: 16px 24px 0;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      flex-wrap: nowrap;
+      scrollbar-width: none;
+      gap: 6px;
+    }
+    .filter-bar::-webkit-scrollbar { display: none; }
+    .filter-btn { white-space: nowrap; font-size: 9px; padding: 7px 14px; }
+    /* credit rows: drop logo col, simplify grid */
+    .credit-row {
+      grid-template-columns: 44px 1fr auto auto;
+      gap: 10px;
+      padding: 12px 6px;
+    }
+    /* hide logo circle on small screens */
+    .credit-logo { display: none; }
+    .credit-year { font-size: 11px; }
+    .credit-title { font-size: 13px; }
+    .credit-role { font-size: 10px; }
+    .type-pill { font-size: 9px; padding: 2px 7px; }
+    .category-label { margin-bottom: 8px; }
+    .category-label-text { font-size: 16px; }
+    .graffiti-strip svg { max-height: 120px !important; }
+  }
+  @media (max-width: 480px) {
+    .page-header { padding: 24px 16px 0; }
+    .credits-container { padding: 20px 16px 52px; }
+    .filter-bar { padding: 12px 16px 0; }
+    .credit-row {
+      grid-template-columns: 38px 1fr auto;
+      gap: 8px;
+    }
+    /* hide type pill on very small screens too */
+    .type-pill { display: none; }
+    .credit-role { display: none; }
+    .graffiti-strip svg { max-height: 100px !important; }
+  }
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav role="list">
+      <li class="nav-brand"><a href="index.html" class="brand-link">Henry French</a></li>
+      <li><a href="index.html">Home</a></li>
+      <li><a href="about.html">About</a></li>
+      <li><a href="portfolio.html" class="active">Portfolio</a></li>
+      <li><a href="work.html">Work</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </nav>
+  </header>
+
+  <main>
+
+  <!-- ── GRAFFITI STRIP ── -->
+  <div class="graffiti-strip">
+    <svg viewBox="0 0 1440 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style="max-height:160px;">
+      <rect width="1440" height="160" fill="#111110"/>
+      <rect width="1440" height="160" fill="url(#sl-port)" opacity="0.035"/>
+      <defs>
+        <pattern id="sl-port" x="0" y="0" width="2" height="4" patternUnits="userSpaceOnUse">
+          <rect x="0" y="0" width="2" height="2" fill="#eeebe4"/>
+        </pattern>
+      </defs>
+      <!-- drips -->
+      <rect x="80"   y="0" width="6"  height="70"  rx="3" fill="rgba(238,235,228,0.07)"/>
+      <ellipse cx="83"  cy="72" rx="7" ry="14" fill="rgba(238,235,228,0.07)"/>
+      <rect x="400"  y="0" width="4"  height="40"  rx="2" fill="rgba(238,235,228,0.05)"/>
+      <ellipse cx="402" cy="42" rx="5" ry="9"  fill="rgba(238,235,228,0.05)"/>
+      <rect x="820"  y="0" width="7"  height="85"  rx="3.5" fill="rgba(238,235,228,0.06)"/>
+      <ellipse cx="823" cy="87" rx="8" ry="15" fill="rgba(238,235,228,0.06)"/>
+      <rect x="1150" y="0" width="5"  height="55"  rx="2.5" fill="rgba(238,235,228,0.06)"/>
+      <ellipse cx="1152" cy="57" rx="6" ry="11" fill="rgba(238,235,228,0.06)"/>
+      <rect x="1380" y="0" width="4"  height="35"  rx="2" fill="rgba(238,235,228,0.04)"/>
+      <ellipse cx="1382" cy="37" rx="5" ry="8"  fill="rgba(238,235,228,0.04)"/>
+      <!-- ghost: CREDITS -->
+      <text x="140" y="148" font-family="Arial Black,sans-serif" font-size="140" font-weight="900"
+        fill="none" stroke="#eeebe4" stroke-width="1.5" opacity="0.05" letter-spacing="-2">CREDITS</text>
+      <!-- scrawl -->
+      <text x="50"  y="110" font-family="'Permanent Marker',cursive" font-size="32" fill="rgba(238,235,228,0.38)" transform="rotate(-2,50,110)">70+ credits</text>
+      <text x="620" y="128" font-family="'Permanent Marker',cursive" font-size="20" fill="rgba(238,235,228,0.24)" transform="rotate(2,620,128)">film · doc · commercial · live</text>
+      <text x="1100" y="108" font-family="'Permanent Marker',cursive" font-size="18" fill="rgba(238,235,228,0.22)" transform="rotate(-3,1100,108)">sound mixer · boom op</text>
+      <!-- slash marks -->
+      <g opacity="0.18" stroke="#eeebe4" stroke-width="2" stroke-linecap="round">
+        <line x1="490" y1="30" x2="506" y2="70"/>
+        <line x1="504" y1="30" x2="520" y2="70"/>
+        <line x1="518" y1="30" x2="534" y2="70"/>
+      </g>
+      <!-- crown -->
+      <g transform="translate(1300,20)" opacity="0.3">
+        <polygon points="0,24 9,0 18,15 27,4 36,15 45,0 54,24" fill="none" stroke="#eeebe4" stroke-width="2" stroke-linejoin="round"/>
+        <line x1="0" y1="24" x2="54" y2="24" stroke="#eeebe4" stroke-width="2" stroke-linecap="round"/>
+      </g>
+      <!-- stars -->
+      <g opacity="0.26" stroke="#eeebe4" stroke-width="1.5" stroke-linecap="round">
+        <line x1="960" y1="44" x2="960" y2="60"/>
+        <line x1="952" y1="52" x2="968" y2="52"/>
+        <line x1="955" y1="47" x2="965" y2="57"/>
+        <line x1="965" y1="47" x2="955" y2="57"/>
+      </g>
+      <!-- spray -->
+      <g fill="#eeebe4">
+        <circle cx="28"   cy="148" r="1.3" opacity="0.2"/>
+        <circle cx="38"   cy="140" r="0.7" opacity="0.14"/>
+        <circle cx="1430" cy="100" r="1.4" opacity="0.18"/>
+        <circle cx="1420" cy="110" r="0.8" opacity="0.13"/>
+      </g>
+    </svg>
+  </div>
+
+
+    <!-- HERO -->
+    <div class="portfolio-hero">
+      <h1 class="hero-title">My<br>Credits.</h1>
+      <div class="hero-right">
+        <div class="hero-stat">
+          <strong>70+</strong>
+          credits &amp; counting
+        </div>
+        <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="hero-imdb-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="2" y="4" width="20" height="16" rx="3" stroke="currentColor" stroke-width="2"/><path d="M6 8v8M10 8v8M10 12h5a2 2 0 0 1 0 4h-5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          View on IMDb ↗
+        </a>
+      </div>
+    </div>
+
+    <!-- FILTER -->
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterCredits('all',this)">All</button>
+      <button class="filter-btn" onclick="filterCredits('ad',this)">Commercial</button>
+      <button class="filter-btn" onclick="filterCredits('sport',this)">Sports</button>
+      <button class="filter-btn" onclick="filterCredits('tv',this)">TV</button>
+      <button class="filter-btn" onclick="filterCredits('doc',this)">Documentary</button>
+      <button class="filter-btn" onclick="filterCredits('film',this)">Film</button>
+      <button class="filter-btn" onclick="filterCredits('short',this)">Short</button>
+    </div>
+
+    <!-- CREDITS -->
+    <div class="credits-section">
+
+      <!-- SOUND MIXER -->
+      <div class="credits-category">
+        <div class="category-label">
+          <span class="category-label-text">Sound Mixer</span>
+          <div class="category-rule"></div>
+          <span class="category-count" id="count-mixer"></span>
+          <span class="category-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="9" y="2" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.8"/><path d="M5 10a7 7 0 0 0 14 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="17" x2="12" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="8" y1="21" x2="16" y2="21" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </span>
+        </div>
+        <div id="list-mixer">
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">American Prince: JFK Jr.<small>CNN · 3 episodes</small></span>
+            <span class="credit-role">Sound Recording</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">For the Win: NWSL<small>Amazon Prime · 1 episode · ★ 8.5</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Clutch: The NBA Playoffs<small>ESPN · 1 episode · ★ 8.0</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Jumpman<small>Tribeca · ★ 9.4</small></span>
+            <span class="credit-role">Production Sound</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2023</span>
+            <span class="credit-title">BONDEd by BALL: Inside the OBL<small>Showtime · 1 episode</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="film">
+            <span class="credit-year">2023</span>
+            <span class="credit-title">Playing Sam<small>Tubi · ★ 7.4</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill film">Film</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">2022</span>
+            <span class="credit-title">To the East</span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2022</span>
+            <span class="credit-title">Black Market with Michael K. Williams<small>VICE · 3 episodes · ★ 8.1</small></span>
+            <span class="credit-role">Sound Mixer · Sound Recordist</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2021</span>
+            <span class="credit-title">Roots Less Traveled<small>NBC · 3 episodes · ★ 7.8</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2021</span>
+            <span class="credit-title">HOW WE DO – Sketches of the Species<small>3 episodes</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">2020</span>
+            <span class="credit-title">Sartorius Goes Downstairs</span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="film">
+            <span class="credit-year">2020</span>
+            <span class="credit-title">A Shot Through the Wall<small>Tubi · ★ 5.3</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill film">Film</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="film">
+            <span class="credit-year">2019</span>
+            <span class="credit-title">I'm No Longer Here<small>Netflix · ★ 7.3</small></span>
+            <span class="credit-role">Additional Sound Mixer</span>
+            <span class="type-pill film">Film</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">2018</span>
+            <span class="credit-title">Airborne</span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">2015</span>
+            <span class="credit-title">Porch</span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">—</span>
+            <span class="credit-title">MIA</span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- BOOM OPERATOR -->
+      <div class="credits-category">
+        <div class="category-label">
+          <span class="category-label-text">Boom Operator</span>
+          <div class="category-rule"></div>
+          <span class="category-count" id="count-boom"></span>
+          <span class="category-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="6" r="3" stroke="currentColor" stroke-width="1.8"/><line x1="12" y1="9" x2="12" y2="20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="9" y1="20" x2="15" y2="20" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="12" y1="6" x2="20" y2="2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><rect x="19" y="1" width="4" height="2" rx="1" fill="currentColor"/></svg>
+          </span>
+        </div>
+        <div id="list-boom">
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="short">
+            <span class="credit-year">2022</span>
+            <span class="credit-title">Transit: A New York City Fairytale</span>
+            <span class="credit-role">Boom Operator</span>
+            <span class="type-pill short">Short</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="film">
+            <span class="credit-year">2020</span>
+            <span class="credit-title">A Shot Through the Wall<small>Tubi · ★ 5.3</small></span>
+            <span class="credit-role">Boom Operator</span>
+            <span class="type-pill film">Film</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- ADDITIONAL CREDITS -->
+      <div class="credits-category">
+        <div class="category-label">
+          <span class="category-label-text">Additional Credits</span>
+          <div class="category-rule"></div>
+          <span class="category-count" id="count-other"></span>
+          <span class="category-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 18v-6a9 9 0 0 1 18 0v6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3v5z" stroke="currentColor" stroke-width="1.8"/><path d="M3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3v5z" stroke="currentColor" stroke-width="1.8"/></svg>
+          </span>
+        </div>
+        <div id="list-other">
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="doc">
+            <span class="credit-year">2021</span>
+            <span class="credit-title">The Oxy Kingpins<small>CBC · ★ 7.1</small></span>
+            <span class="credit-role">Sound Recordist</span>
+            <span class="type-pill doc">Doc</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="doc">
+            <span class="credit-year">2020</span>
+            <span class="credit-title">Tightrope: Americans Reaching for Hope<small>PBS · ★ 8.0</small></span>
+            <span class="credit-role">Sound Recordist</span>
+            <span class="type-pill doc">Doc</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2020</span>
+            <span class="credit-title">The Ascendants<small>4 episodes</small></span>
+            <span class="credit-role">Sound Designer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2019</span>
+            <span class="credit-title">Lens of Culture<small>Cleo TV · 9 episodes</small></span>
+            <span class="credit-role">Audio Engineer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- COMMERCIALS & BRAND WORK -->
+      <div class="credits-category">
+        <div class="category-label">
+          <span class="category-label-text">Commercials & Brand Work</span>
+          <div class="category-rule"></div>
+          <span class="category-count" id="count-ad"></span>
+          <span class="category-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 11l19-9-9 19-2-8-8-2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div id="list-ad">
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2026</span>
+            <span class="credit-title">Stiller Soda w/ Ben Stiller<small>Some Assembly Required</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2026</span>
+            <span class="credit-title">AWGE x ASAP Rocky Fashion Show<small>RocNation</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2026</span>
+            <span class="credit-title">Spotify: Leaders of the Next Generation w/ Speedy<small>Take One</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Reebok Commercial<small>Roadside Films</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Colgate SFX<small>Colgate</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Nike x NBA<small>Freshtape Media</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">BMS x Henry French<small>Bristol-Myers Squibb</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Kiehl's<small>Untold Fable</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Adidas<small>Loop @ Dumbo, Brooklyn</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">MSFT x Olandria: Copilot<small>Fresh Tape Media</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Jolie Commercial<small>Mikey De Temple</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Michael Kors<small>Michael Kors</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Hypebeast x Nike<small>HYPEBEAST</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Reebok / CrossFit<small>Reebok</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Apple Arcade<small>Builder's Club</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">H&amp;M Reflection Video<small>Malka Media</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Nexxus x AL<small>Condé Nast</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">L'Oréal<small>Malka Media · recurring</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">MAC 2024<small>Tann Services</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2023</span>
+            <span class="credit-title">Mountain Dew Commercial<small>Redbush</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="ad">
+            <span class="credit-year">2023</span>
+            <span class="credit-title">United Airlines x SKRATCH "Game Recognize Game"</span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill ad">Ad</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- SPORTS & LIVE EVENTS -->
+      <div class="credits-category">
+        <div class="category-label">
+          <span class="category-label-text">Sports & Live Events</span>
+          <div class="category-rule"></div>
+          <span class="category-count" id="count-sport"></span>
+          <span class="category-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="6" stroke="currentColor" stroke-width="1.8"/><path d="M8.21 13.89L7 23l5-3 5 3-1.21-9.11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+        </div>
+        <div id="list-sport">
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">MLB World Series<small>MLB Network · 14-day run</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Breaking Through w/ Ayan Broomfield<small>Tennis Channel</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">US Open Beauty Show<small>Freshtape Media · 3-day run</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Interview w/ Novak Djokovic<small>Words & Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">ITHF x Maria Sharapova<small>Katie @ Project Life Media</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">The Yankees Win | Old Timers' Game<small>Pinstripe Productions</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">PWHL Shoot<small>Good Karma Company</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">NBA Prime; Knicks<small>Prime Video Sports</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">ESPYs Pre-Tape: Eli Manning<small>Words & Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">ESPYs Pre-Tape: Serena Williams<small>Words & Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Zverev Brothers Interview<small>Tennis Channel</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Red Bull Kumite<small>Digital Bodega</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">NWSL Gotham FC<small>Words & Pictures · season coverage</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">NWSL Championship<small>Words & Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">PGA Tour<small>PGA · multiple rounds</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">NBA Documentary<small>Fullwell73</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="sport">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">WNBA Draft<small>Fresh Tape Media</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill sport">Sport</span>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- NOTABLE INTERVIEWS & DOCS -->
+      <div class="credits-category">
+        <div class="category-label">
+          <span class="category-label-text">Notable Interviews & Docs</span>
+          <div class="category-rule"></div>
+          <span class="category-count" id="count-notable"></span>
+          <span class="category-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M15 10l4.553-2.276A1 1 0 0 1 21 8.618v6.764a1 1 0 0 1-1.447.894L15 14v-4z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="2" y="7" width="13" height="10" rx="2" stroke="currentColor" stroke-width="1.8"/></svg>
+          </span>
+        </div>
+        <div id="list-notable">
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Martin Scorsese Interview<small>Right Light LLC</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">The Next Move with Questlove<small>Words & Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">KC x Diana Taurasi<small>Imagine Motion Productions</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Duke; Grant Hill<small>Words & Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Mission: Impossible Premiere<small>Paramount Pictures</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">TIME 100 Gala x Toyota<small>TIME</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Let's Do Dinner w/ Stella Artois<small>Made by Plot</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="doc">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Tim Curry Doc<small>Pete Ferriero; Harriet St Films LLC</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill doc">Doc</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="doc">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Eddie Docu<small>Morpheus</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill doc">Doc</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2025</span>
+            <span class="credit-title">Katie Couric<small>Imagine Motion Productions · recurring</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Interview w/ Wyclef Jean<small>Entropico / Google</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Interview w/ Michael Kors<small>Michael Kors</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Mastercard SU2C w/ Lauren Gardner & Anthony Rizzo<small>Imagine Motion Productions</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="doc">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Untold Stories: Brett Favre<small>EverWonder</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill doc">Doc</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Sesame Street<small>Jon Schwarz</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2024</span>
+            <span class="credit-title">Portrait of a Queen<small>MTV</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2023</span>
+            <span class="credit-title">True Crime: Obsessed<small>Obsessed Network</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+          <a href="https://www.imdb.com/name/nm6629414/" target="_blank" class="credit-row" data-type="tv">
+            <span class="credit-year">2023</span>
+            <span class="credit-title">Amazon Music — Janelle Monáe Interview<small>Amazon</small></span>
+            <span class="credit-role">Sound Mixer</span>
+            <span class="type-pill tv">TV</span>
+          </a>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <svg class="footer-wave" viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 30 C180 60 360 0 540 30 C720 60 900 0 1080 30 C1260 60 1350 15 1440 30 L1440 60 L0 60 Z" fill="#111110"/>
+  </svg>
+
+  <footer>
+    <div style="display:flex;justify-content:center;">
+      <a href="#" class="back-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'});return false;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Back to top
+      </a>
+    </div>
+  </footer>
+
+  <script>
+    function filterCredits(type, btn) {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.credit-row').forEach(row => {
+        row.style.display = (type === 'all' || row.dataset.type === type) ? '' : 'none';
+      });
+      document.querySelectorAll('.credits-category').forEach(cat => {
+        const visible = [...cat.querySelectorAll('.credit-row')].some(r => r.style.display !== 'none');
+        cat.style.display = visible ? '' : 'none';
+      });
+    }
+
+    function updateCounts() {
+      const sets = [
+        { id: 'count-mixer',   list: 'list-mixer'   },
+        { id: 'count-boom',    list: 'list-boom'     },
+        { id: 'count-other',   list: 'list-other'    },
+        { id: 'count-ad',      list: 'list-ad'       },
+        { id: 'count-sport',   list: 'list-sport'    },
+        { id: 'count-notable', list: 'list-notable'  },
+      ];
+      sets.forEach(({ id, list }) => {
+        const n = document.querySelectorAll('#' + list + ' .credit-row').length;
+        document.getElementById(id).textContent = n + ' credit' + (n !== 1 ? 's' : '');
+      });
+    }
+
+    updateCounts();
+
+    // ── Company logo injection ──
+    const LOGO_DOMAINS = {
+      'MLB Network':                        'mlb.com',
+      'Prime Video Sports':                 'primevideo.com',
+      'Tennis Channel':                     'tennischannel.com',
+      'CBS':                                'cbs.com',
+      'TIME':                               'time.com',
+      'MTV':                                'mtv.com',
+      'Paramount Pictures':                 'paramount.com',
+      'RocNation':                          'rocnation.com',
+      'Reebok':                             'reebok.com',
+      'Colgate':                            'colgate.com',
+      'Nike':                               'nike.com',
+      'HYPEBEAST':                          'hypebeast.com',
+      'H&M':                                'hm.com',
+      'H&amp;M':                            'hm.com',
+      'Michael Kors':                       'michaelkors.com',
+      'Bristol-Myers Squibb':               'bms.com',
+      'Condé Nast':                         'condenast.com',
+      'Adidas':                             'adidas.com',
+      'Loop @ Dumbo, Brooklyn':             'adidas.com',
+      'Kiehl\'s':                           'kiehls.com',
+      'Spotify':                            'spotify.com',
+      'PGA':                                'pga.com',
+      'USA Today':                          'usatoday.com',
+      'USA Today | GANNETT':                'usatoday.com',
+      'Amazon':                             'amazon.com',
+      'Entropico / Google':                 'google.com',
+      'Amazon Music':                       'amazon.com',
+      'EverWonder':                         'everwonder.tv',
+      'Imagine Motion Productions':         'imaginemotion.com',
+      'Fresh Tape Media':                   'freshtapemedia.com',
+      'Freshtape Media':                    'freshtapemedia.com',
+      'Fullwell73':                         'fullwell73.com',
+      'Digital Bodega':                     'digitalbodega.com',
+      'Words & Pictures':                   'wordsandpictures.tv',
+      'Words & Pictures · season coverage': 'wordsandpictures.tv',
+      'Made by Plot':                       'madebyplot.com',
+      'CNN':                                'cnn.com',
+      'Amazon Prime':                       'primevideo.com',
+      'ESPN':                               'espn.com',
+      'Tribeca':                            'tribecafilm.com',
+      'Showtime':                           'showtime.com',
+      'Tubi':                               'tubi.tv',
+      'VICE':                               'vice.com',
+      'NBC':                                'nbc.com',
+      'Netflix':                            'netflix.com',
+      'CBC':                                'cbc.ca',
+      'PBS':                                'pbs.org',
+      'Cleo TV':                            'cleotv.com',
+    };
+
+    function isCompanyName(text) {
+      if (!text || text.length < 2) return false;
+      if (/^\d/.test(text)) return false;
+      if (text.includes('★')) return false;
+      if (/episode/i.test(text)) return false;
+      return true;
+    }
+
+    function makeInitial(company) {
+      // Pick first real word letter, skip symbols
+      const match = company.match(/[A-Za-z]/);
+      return match ? match[0].toUpperCase() : '?';
+    }
+
+    function buildLogos() {
+      document.querySelectorAll('.credit-row').forEach(row => {
+        const small = row.querySelector('small');
+        const rawText = small ? small.textContent.split('·')[0].trim() : '';
+        const company = rawText;
+
+        const titleEl = row.querySelector('.credit-title');
+        if (!titleEl) return;
+
+        const logoEl = document.createElement('span');
+        logoEl.className = 'credit-logo';
+        titleEl.after(logoEl);
+
+        if (!isCompanyName(company)) return; // leave empty for episode/rating text
+
+        const domain = LOGO_DOMAINS[company];
+
+        // Always show initial as base layer
+        logoEl.textContent = makeInitial(company);
+
+        if (domain) {
+          // Overlay favicon on top via Google's reliable favicon API
+          const img = document.createElement('img');
+          img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=32`;
+          img.alt = company;
+          img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:5px;border-radius:50%;';
+          img.onerror = () => img.remove(); // just keep the initial if favicon fails
+          logoEl.style.position = 'relative';
+          logoEl.appendChild(img);
+        }
+      });
+    }
+
+    buildLogos();
+  </script>
+
+</body>
+</html>
