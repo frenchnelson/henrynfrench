@@ -113,44 +113,6 @@
     }
     header nav li a.active::after { transform: scaleX(1); }
 
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      list-style: none;
-    }
-
-    /* dot separator between items */
-    nav li + li::before {
-      content: '·';
-      color: rgba(17,17,16,0.22);
-      font-size: 18px;
-      line-height: 1;
-      margin: 0 2px;
-      position: relative;
-      top: 1px;
-    }
-
-    nav a {
-      text-decoration: none;
-      color: var(--ink);
-      padding: 5px 14px 6px;
-      border: 1.5px solid transparent;
-      border-radius: 7px;
-      transition: border-color 0.2s, background 0.2s, color 0.2s;
-      display: inline-block;
-    }
-
-    nav a:hover {
-      border-color: rgba(17,17,16,0.35);
-    }
-
-    nav a.active {
-      background: var(--ink);
-      color: var(--paper);
-      border-color: var(--ink);
-    }
-
     /* ── HERO ── */
     .hero {
       display: grid;
@@ -323,7 +285,6 @@
       z-index: 2;
     }
 
-    /* ── CTA SECTION ── */
     /* ── CTA SECTION ── */
     .cta-section {
       padding: 80px 64px 100px;
